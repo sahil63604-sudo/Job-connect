@@ -76,7 +76,7 @@ const login = async (req, res) => {
                 roles: userExist.roles
              },
             process.env.SECRET_KEY,
-            { expiresIn: '10m' }
+            { expiresIn: '20m' }
         )
         res.json({
             message: 'login successfull',

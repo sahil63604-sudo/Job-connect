@@ -9,7 +9,6 @@ const getMyJobs = async (req, res) => {
 
         const myJobs = await jobSchema.find({ createdBy: recruiterId })
         
-        console.log(myJobs);
         res.json({
             message: 'jobs fetched successfully',
             myJobs

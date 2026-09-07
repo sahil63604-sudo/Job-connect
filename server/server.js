@@ -8,11 +8,12 @@ const DBconnection=require('./config/DB')
 DBconnection();
 app.use(cors());
 app.use(express.json());
-const routes=require('./routes/authRoutes'
-)
+const routes=require('./routes/authRoutes')
 const recruiterRouter=require('./routes/recruiterRoutes')
-app.use('/api/job',recruiterRouter)
+const applicationRouter=require('./routes/applicationRoutes')
 app.use('/api/auth',routes)
+app.use('/api/job',recruiterRouter)
+app.use('/api/apply',applicationRouter)
 app.get('/',(req,res)=>{
         res.json({
             message:'job track is live'
