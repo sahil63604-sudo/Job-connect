@@ -1,7 +1,7 @@
 const jobSchema = require('../models/jobSchema')
 const RecruiterController = async (req, res) => {
     const recruiterId = req.recruiterId
-    console.log(req.body,recruiterId);
+    console.log(recruiterId);
     
     const { title, company, description, location, salary, jobType, skills } = req.body;
 

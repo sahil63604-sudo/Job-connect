@@ -35,7 +35,7 @@ const jobSchema = mongoose.Schema(
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'userschemas',
-            required:true
+            required:true,
         }
 
     }

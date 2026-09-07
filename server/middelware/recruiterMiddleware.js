@@ -2,21 +2,19 @@
 const recruiterMiddleware = (req, res, next) => {
     try {
         
-        const userRole=req.user.roles
-        console.log(userRole);
+        const user=req.user
         
-        if (userRole!=='recruiter') {
+        
+        if (user.roles!=='recruiter') {
             return res.status(403).json({
                 message:"forbidden"
             })
         }
         req.recruiterId=req.user.id
-            next()
 
-        res.json({
-            message: "User authenticated",
-            user: req.user
-        });
+        
+       
+        next()
     } catch (error) {
         console.error(error)
         return  res.status(401).json({
