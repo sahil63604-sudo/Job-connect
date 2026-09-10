@@ -9,10 +9,10 @@ DBconnection();
 app.use(cors());
 app.use(express.json());
 const routes=require('./routes/authRoutes')
-const recruiterRouter=require('./routes/recruiterRoutes')
+const jobRouter=require('./routes/jobRoutes')
 const applicationRouter=require('./routes/applicationRoutes')
 app.use('/api/auth',routes)
-app.use('/api/job',recruiterRouter)
+app.use('/api/job',jobRouter)
 app.use('/api/apply',applicationRouter)
 app.get('/',(req,res)=>{
         res.json({

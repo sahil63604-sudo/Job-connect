@@ -135,4 +135,5 @@ const updateController = async (req, res) => {
 
     }
 }
+
 module.exports = { applyController, getApplicants, getApplications, updateController }
