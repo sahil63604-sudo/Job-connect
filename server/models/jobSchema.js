@@ -34,7 +34,7 @@ const jobSchema = mongoose.Schema(
         },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref:'userschemas',
+            ref:'UserSchema',
             required:true,
         }
 

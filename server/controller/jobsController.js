@@ -1,4 +1,5 @@
 
+const { default: mongoose } = require("mongoose");
 const jobSchema = require("../models/jobSchema");
 
 const CreateJob = async (req, res) => {
@@ -52,7 +53,7 @@ const updateJob = async (req, res) => {
     const recruiterId = req.recruiterId;
     const jobId = req.params.Id;
     const { title, company, description, location, salary, jobType, skills } = req.body;
-   
+
     try {
         const update = await jobSchema.findOneAndUpdate({
             _id: jobId,
@@ -107,10 +108,10 @@ const deleteJob = async (req, res) => {
     }
 }
 const searchJobs = async (req, res) => {
-    const { search, location, minSalary, maxSalary, jobType,sortby,page } = req.query;
-     const limit=10;
-    const CurrentPage=Number(page) || 1;
-    const skip=(CurrentPage-1)*limit;
+    const { search, location, minSalary, maxSalary, jobType, sortby, page } = req.query;
+    const limit = 10;
+    const CurrentPage = Number(page) || 1;
+    const skip = (CurrentPage - 1) * limit;
     try {
         let query = {}
 
@@ -168,35 +169,35 @@ const searchJobs = async (req, res) => {
         else if (maxSalary) {
             query.salary = { $lte: Number(maxSalary) };
         }
-        let sort={createdAt:-1}
-        if (sortby==='salaryHigh') {
-            sort={salary:-1}
-        }else if(sortby==='salaryLow'){
-            sort={salary: 1}
+        let sort = { createdAt: -1 }
+        if (sortby === 'salaryHigh') {
+            sort = { salary: -1 }
+        } else if (sortby === 'salaryLow') {
+            sort = { salary: 1 }
         }
-       const totalJobs = await jobSchema.countDocuments(query);
+        const totalJobs = await jobSchema.countDocuments(query);
 
-const jobs = await jobSchema
-    .find(query)
-    .sort(sort)
-    .skip(skip)
-    .limit(limit);
+        const jobs = await jobSchema
+            .find(query)
+            .sort(sort)
+            .skip(skip)
+            .limit(limit);
 
-if (jobs.length === 0) {
-    return res.status(404).json({
-        message: "job not found with given keywords try using different keywords"
-    });
-}
+        if (jobs.length === 0) {
+            return res.status(404).json({
+                message: "job not found with given keywords try using different keywords"
+            });
+        }
 
-res.json({
-    jobs,
-    pagination: {
-        currentPage: CurrentPage,
-        limit,
-        totalJobs,
-        totalPages: Math.ceil(totalJobs / limit)
-    }
-});
+        res.json({
+            jobs,
+            pagination: {
+                currentPage: CurrentPage,
+                limit,
+                totalJobs,
+                totalPages: Math.ceil(totalJobs / limit)
+            }
+        });
 
     } catch (error) {
         console.log(error);
@@ -207,4 +208,29 @@ res.json({
     }
 
 }
-module.exports = { getMyJobs, updateJob, deleteJob, CreateJob, searchJobs }
+
+const getjobdetails = async (req, res) => {
+    const { jobId } = req.params
+    try {
+        if (!mongoose.Types.ObjectId.isValid(jobId)) {
+            return res.json({
+                message: 'not a valid object Id'
+            })
+        }
+        const job = await jobSchema.findOne({ _id: jobId }).populate('createdBy', 'name email createdAt');
+        if (!job) {
+            return res.status(404).json({
+                message: "job not found"
+            })
+        }
+        res.status(200).json({
+            job
+        })
+    } catch (error) {
+        console.log(error);
+
+    }
+
+
+}
+module.exports = { getMyJobs, updateJob, deleteJob, CreateJob, searchJobs, getjobdetails }
