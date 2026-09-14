@@ -55,27 +55,38 @@ const getApplicants = async (req, res) => {
     const recruiterId = req.recruiterId;
 
     try {
-        const applicants = await applicantionSchema.find().populate("job", {
-            match: {
-                createdBy: recruiterId
-            }
-        }).populate("applicant", "name email")
+        if (!recruiterId) {
+            return res.status(401).json({
+                message: "Recruiter authentication required"
+            });
+        }
 
+        const applicants = await applicantionSchema
+            .find()
+            .populate({
+                path: "job",
+                match: {
+                    createdBy: recruiterId
+                }
+            })
+            .populate("applicant", "name email");
 
-        const filteredApplicants = applicants.filter(application =>
-            application.job !== null
-        )
+        const filteredApplicants = applicants.filter(
+            (application) => application.job !== null
+        );
 
+        res.status(200).json({
+            filteredApplicants
+        });
 
-
-        res.json({
-            filteredApplicants,
-
-        })
     } catch (error) {
         console.log(error);
+
+        res.status(500).json({
+            message: "Failed to fetch applicants"
+        });
     }
-}
+};
 
 const getApplications = async (req, res) => {
     const jobseekerId = req.jobseekerId;
@@ -96,44 +107,70 @@ const getApplications = async (req, res) => {
         console.log(error);
     }
 }
-
 const updateController = async (req, res) => {
     const applicationId = req.params.applicationId;
     const recruiterId = req.recruiterId;
     const { status } = req.body;
+
     try {
-        console.log(status);
-
-        const applications = await applicantionSchema.find({ _id: applicationId }).populate({
-            path: "job",
-            match: {
-                createdBy: recruiterId
-            }
-        })
-        if (!applications.length) {
-            return res.status(404).json({ message: "application not found" });
+        if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+            return res.status(400).json({
+                message: "Invalid application ID"
+            });
         }
 
-        if (applications[0].job === null) {
-            return res.status(403).json({ message: "you are not the owner of this job" });
+        const allowedStatus = [
+            "applied",
+            "interview",
+            "accepted",
+            "rejected"
+        ];
+
+        if (!allowedStatus.includes(status)) {
+            return res.status(400).json({
+                message: "Invalid application status"
+            });
         }
 
-        if (applications[0].job.createdBy.toString() !== recruiterId) {
+        const application = await applicantionSchema
+            .findById(applicationId)
+            .populate({
+                path: "job",
+                match: {
+                    createdBy: recruiterId
+                }
+            });
+
+        if (!application) {
+            return res.status(404).json({
+                message: "Application not found"
+            });
+        }
+
+        if (application.job === null) {
             return res.status(403).json({
-                message: 'you are not the owner of this job'
-            })
+                message: "You are not the owner of this job"
+            });
         }
-        const updated = await applicantionSchema.findOneAndUpdate({ _id: applicationId }, {
-            status: status
-        })
-        res.json({
-            message: 'document updated successfully',
+
+        const updated = await applicantionSchema.findByIdAndUpdate(
+            applicationId,
+            { status },
+            { new: true }
+        );
+
+        res.status(200).json({
+            message: "Application status updated successfully",
             updated
-        })
+        });
+
     } catch (error) {
         console.log(error);
 
+        res.status(500).json({
+            message: "Server error"
+        });
     }
-}
+};
 
 module.exports = { applyController, getApplicants, getApplications, updateController }

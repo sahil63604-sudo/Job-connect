@@ -213,9 +213,9 @@ const getjobdetails = async (req, res) => {
     const { jobId } = req.params
     try {
         if (!mongoose.Types.ObjectId.isValid(jobId)) {
-            return res.json({
-                message: 'not a valid object Id'
-            })
+            return res.status(400).json({
+                message: "Not a valid ObjectId"
+            });
         }
         const job = await jobSchema.findOne({ _id: jobId }).populate('createdBy', 'name email createdAt');
         if (!job) {
@@ -227,9 +227,11 @@ const getjobdetails = async (req, res) => {
             job
         })
     } catch (error) {
-        console.log(error);
-
-    }
+    console.log(error);
+    res.status(500).json({
+        message: "Failed to fetch job details"
+    });
+}
 
 
 }
