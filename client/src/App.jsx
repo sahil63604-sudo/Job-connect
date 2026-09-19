@@ -6,6 +6,7 @@ import { Register } from './pages/Register';
 import Navbar from './components/Navbar';
 import Jobs from './pages/Jobs';
 import JobDetails from './pages/JobDetails';
+import MyApplications from './pages/MyApplications';
 
  const App = () => {
   return (
@@ -16,6 +17,7 @@ import JobDetails from './pages/JobDetails';
         <Route path="/" element={<Home/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/myapplications" element={<MyApplications/>} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path='/jobs/:jobId' element={<JobDetails/>}/>
     </Routes>
