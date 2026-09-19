@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Jobs from './pages/Jobs';
 import JobDetails from './pages/JobDetails';
 import MyApplications from './pages/MyApplications';
+import RecruiterDashboard from './pages/RecruiterDashboard';
+import Applicants from './pages/Applicants';
 
  const App = () => {
   return (
@@ -19,6 +21,11 @@ import MyApplications from './pages/MyApplications';
         <Route path="/register" element={<Register/>} />
         <Route path="/myapplications" element={<MyApplications/>} />
         <Route path="/jobs" element={<Jobs />} />
+        <Route
+    path="/recruiterJobs"
+    element={<RecruiterDashboard />}
+/>
+        <Route path='recruiterJobs/:jobId/applicants' element={<Applicants/>}/>
         <Route path='/jobs/:jobId' element={<JobDetails/>}/>
     </Routes>
     </BrowserRouter>
