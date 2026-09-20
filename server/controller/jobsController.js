@@ -235,4 +235,31 @@ const getjobdetails = async (req, res) => {
 
 
 }
-module.exports = { getMyJobs, updateJob, deleteJob, CreateJob, searchJobs, getjobdetails }
+const getRecruiterJob = async (req, res) => {
+    const recruiterId = req.recruiterId;
+    const { jobId } = req.params;
+
+    try {
+        const job = await jobSchema.findOne({
+            _id: jobId,
+            createdBy: recruiterId
+        });
+
+        if (!job) {
+            return res.status(404).json({
+                message: "Job not found or you are not the owner"
+            });
+        }
+
+        res.status(200).json({
+            job
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Server error"
+        });
+    }
+};
+module.exports = { getMyJobs, updateJob, deleteJob, CreateJob, searchJobs, getjobdetails,getRecruiterJob }
