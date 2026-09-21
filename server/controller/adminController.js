@@ -1,3 +1,4 @@
+const jobSchema = require('../models/jobSchema')
 const UserSchema = require('../models/userSchema')
 
 async function getAllUsers(req, res) {
@@ -44,4 +45,48 @@ const deleteUser = async (req, res) => {
         })
     }
 }
-module.exports = { getAllUsers, deleteUser }
+async function getAllJobs(req, res) {
+    try {
+        const jobs = await jobSchema.find() .populate('createdBy', 'name email createdAt')
+
+        if (jobs.length === 0) {
+            return res.status(404).json({
+                message: "No jobs found"
+            })
+        }
+
+        res.status(200).json({
+            jobs
+        })
+    } catch (error) {
+        console.log(error)
+
+        res.status(500).json({
+            message: "Server error"
+        })
+    }
+}
+const admindeleteJob = async (req, res) => {
+    const jobId = req.params.jobId;
+
+    try {
+        const deletejob = await jobSchema.findByIdAndDelete(jobId)
+
+        if (deletejob === null) {
+            return res.status(404).json({
+                message: 'job not found'
+            })
+        }
+
+        res.status(200).json({
+            message: 'job deleted successfully'
+        })
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: 'server error'
+        })
+    }
+}
+module.exports = { getAllUsers, deleteUser, getAllJobs,admindeleteJob }

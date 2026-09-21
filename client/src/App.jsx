@@ -12,6 +12,7 @@ import Applicants from './pages/Applicants';
 import CreateJob from './pages/CreateJob';
 import EditJob from './pages/EditJob';
 import AdminUsers from './pages/AdminUsers';
+import AdminJobs from './pages/AdminJobs';
 
 const App = () => {
   return (
@@ -35,7 +36,7 @@ const App = () => {
 
           <Route path='/jobs/:jobId' element={<JobDetails />} />
           <Route path='/admin/users' element={<AdminUsers />} />
-
+          <Route path="/admin/jobs" element={<AdminJobs />} />
         </Routes>
       </BrowserRouter>
     </>
