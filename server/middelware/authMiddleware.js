@@ -17,7 +17,8 @@ const authMiddleware = (req, res, next) => {
             token,
             process.env.SECRET_KEY
         );
-
+       
+        
         req.user = verify;
 
         next();

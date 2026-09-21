@@ -10,10 +10,13 @@ app.use(cors());
 app.use(express.json());
 const routes=require('./routes/authRoutes')
 const jobRouter=require('./routes/jobRoutes')
-const applicationRouter=require('./routes/applicationRoutes')
+const applicationRouter=require('./routes/applicationRoutes');
+const AdminRouter = require('./routes/adminRoutes');
+
 app.use('/api/auth',routes)
 app.use('/api/job',jobRouter)
 app.use('/api/apply',applicationRouter)
+app.use('/api/admin',AdminRouter)
 app.get('/',(req,res)=>{
         res.json({
             message:'job track is live'
