@@ -1,3 +1,4 @@
+const applicantionSchema = require('../models/applicantionSchema')
 const jobSchema = require('../models/jobSchema')
 const UserSchema = require('../models/userSchema')
 
@@ -47,7 +48,7 @@ const deleteUser = async (req, res) => {
 }
 async function getAllJobs(req, res) {
     try {
-        const jobs = await jobSchema.find() .populate('createdBy', 'name email createdAt')
+        const jobs = await jobSchema.find().populate('createdBy', 'name email createdAt')
 
         if (jobs.length === 0) {
             return res.status(404).json({
@@ -89,4 +90,31 @@ const admindeleteJob = async (req, res) => {
         })
     }
 }
-module.exports = { getAllUsers, deleteUser, getAllJobs,admindeleteJob }
+async function getAdminStats(req, res) {
+    try {
+        const totalUsers = await UserSchema.countDocuments()
+        const totalApplications = await applicantionSchema.countDocuments()
+        const totalJobs = await jobSchema.countDocuments()
+        const totalJobseekers = await UserSchema.countDocuments({
+            roles: 'jobseeker'
+        })
+        const totalRecruiters = await UserSchema.countDocuments({
+            roles: 'recruiter'
+        })
+
+        res.status(200).json({
+            totalUsers,
+            totalRecruiters,
+            totalJobseekers,
+            totalJobs,
+            totalApplications
+        })
+    } catch (error) {
+        console.log(error)
+
+        res.status(500).json({
+            message: 'server error'
+        })
+    }
+}
+module.exports = { getAllUsers, deleteUser, getAllJobs, admindeleteJob, getAdminStats }

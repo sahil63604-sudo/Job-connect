@@ -13,6 +13,7 @@ import CreateJob from './pages/CreateJob';
 import EditJob from './pages/EditJob';
 import AdminUsers from './pages/AdminUsers';
 import AdminJobs from './pages/AdminJobs';
+import AdminDashboard from './pages/AdminDashboard';
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/recruiterDashboard/edit-job/:jobId" element={<EditJob />} />
 
           <Route path='/jobs/:jobId' element={<JobDetails />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path='/admin/users' element={<AdminUsers />} />
           <Route path="/admin/jobs" element={<AdminJobs />} />
         </Routes>
