@@ -34,7 +34,7 @@ let response = await axios.get(`http://localhost:5000/api/job/recruiterJob/${job
         })
         }
         getJob();
-    },[]) 
+    },[jobId]) 
    
     function handelChanges(e) {
 
@@ -58,6 +58,7 @@ let response = await axios.get(`http://localhost:5000/api/job/recruiterJob/${job
                 }
             }
         )
+        console.log(response.data);
     }
     return (
         <>

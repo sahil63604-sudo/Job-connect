@@ -4,14 +4,22 @@ const bcrypt = require('bcryptjs');
 const registerUser = async (req, res) => {
     try {
 
-        const { name, email, password } = req.body;
-        console.log(name, email, password);
+        const { name, email, password, roles } = req.body;
 
-        if (!name || !email || !password) {
+        const allowedRoles = ["jobseeker", "recruiter"];
+
+        if (!name || !email || !password || !roles) {
             return res.status(400).json({
                 message: "all feilds are required"
             })
         }
+
+        if (!allowedRoles.includes(roles)) {
+            return res.status(400).json({
+                message: "Invalid role"
+            });
+        }
+        
 
         const alreadyexist = await UserSchema.findOne({ email })
 
@@ -27,7 +35,7 @@ const registerUser = async (req, res) => {
             name,
             email,
             password: hashedpassword,
-            roles:req.body.roles
+            roles: req.body.roles
         })
 
         res.status(201).json({
@@ -71,10 +79,10 @@ const login = async (req, res) => {
             })
         }
         const token = jwt.sign(
-            { 
-                id: userExist._id, 
+            {
+                id: userExist._id,
                 roles: userExist.roles
-             },
+            },
             process.env.SECRET_KEY,
             { expiresIn: '20m' }
         )
@@ -85,7 +93,7 @@ const login = async (req, res) => {
     } catch (error) {
         res.json({
             message: "server error",
-            
+
         })
         console.error(error)
     }

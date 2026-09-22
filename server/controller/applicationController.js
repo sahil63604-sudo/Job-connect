@@ -45,8 +45,7 @@ const applyController = async (req, res) => {
     } catch (error) {
         console.error(error)
         res.json({
-            message: 'server error',
-            error
+            message: 'server error'
         })
     }
 }
@@ -104,8 +103,12 @@ const getApplications = async (req, res) => {
 
         })
     } catch (error) {
-        console.log(error);
-    }
+    console.log(error)
+
+    return res.status(500).json({
+        message: 'server error'
+    })
+}
 }
 const updateController = async (req, res) => {
     const applicationId = req.params.applicationId;

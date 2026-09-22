@@ -27,16 +27,18 @@ export default function Login() {
         <label className="text-lg ">Email</label>
         <input
           value={email}
+          type="email"
           onChange={(e)=>{setEmail(e.target.value)}}
-         className="w-full py-2 border rounded-xl mt-1 px-2 " type="text" placeholder="Enter your email"/>
+         className="w-full py-2 border rounded-xl mt-1 px-2 " placeholder="Enter your email"/>
         </div>
       <div>
 
         <label className="text-lg">Password</label>
         <input
+        type="password"
          value={password}
           onChange={(e)=>{setPassword(e.target.value)}}
-        className="w-full py-2 border rounded-xl mt-1 px-2" type="text" placeholder="Enter your password"
+        className="w-full py-2 border rounded-xl mt-1 px-2" placeholder="Enter your password"
 />
         </div>
         <div className="flex justify-center">
